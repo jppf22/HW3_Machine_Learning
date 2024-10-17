@@ -22,72 +22,42 @@ Homework I -- Group 016\\
 (ist1106022, ist1106720)\vskip 1cm
 
 \large{\textbf{Part I}: Pen and paper}\normalsize
+\begin{enumerate}[leftmargin=\labelsep, label=\textbf{\arabic*.)}]
+    \item FILL ME
+    \item FILL ME
+    \item FILL ME
+    \item FILL ME
+\end{enumerate}
+
 
 \large{\textbf{Part II}: Programming}\normalsize
+\begin{enumerate}[leftmargin=\labelsep, label=\textbf{\arabic*.)},start=5]
+    \item To compare the performance of a Linear Regression Model and two MLP Regressors with 2 hidden layers of 10 neurons each, except one has no activation function while the other has ReLU activation functions, we averaged out the performance of each model over 10 separate runs on different 80-20 train-test splits. The resulting boxplots for each model are:
 
-\begin{enumerate}[leftmargin=\labelsep, label=\textbf{\arabic*.)}]
-    \item To compare the performance of a \textit{kNN} classifier with $k=5$ and a naive Bayes classifier, a 5-fold stratified cross-validation was performed on the on a heart disease dataset:
+          \begin{center}
+              \includegraphics[width=0.8\textwidth]{boxplot_models_MAE.png}
+              \captionof{figure}{Boxplot graphs for the Mean Absolute Error of different regression models, accross 80-20 train-test splits.}
+          \end{center}
 
-          \begin{enumerate}[label=\textbf{\alph*.)}]
-              \item For comparing accuracies of the two classifiers, a box plot was generated for each:
+    \item As expected the Linear and MLP without activation regressors have high similar absolute errors, since they can only be used in linearly separable datasets. By adding an activation function, such as ReLU, on the MLP model we are able to learn non-linear patterns within the dataset, which obviously results in a lower absolute error.
 
+          The reason that no activation function, which in reality is the default sign function, leads to bad results is because it creates a linear decision boundary, which is not suitable for non-linear datasets, that can't be separated by simple lines, but rather complex non-linear boundaries.
 
-                    The performance of the \textit{kNN} is less consistent as the box plot is wider, while the Naive Bayes classifier has a more consistent performance, as the box plot is narrower.
+    \item MLP regressors have varied hyperparameters that can be tuned to improve their performance. To find the best combination of hyperparameters, within the choices presented in the assignment, we used a grid search approach, with a single split, applied on all combinations. The results were as follows:
 
-                    This is due to the fact that the \textit{kNN} is non-parametric and therefore is more sensitive across folds, and with non-normalized data, different scaled features, redudant, irrelevant or noisy features can affect the performance of the classifier. 
+          \begin{center}
+              \includegraphics[width=0.8\textwidth]{hyperparameters_performance_plot.png}
+              \captionof{figure}{Performance of different hyperparameters combinations on the MLP Regressor}
+          \end{center}
 
-                    The Naive Bayes classifier, on the other hand, is parametric and is not sensitive to these factors.
+          As it can be seen on the plot, the best L2 penalty - Learning Rate - Batch size combination is the one that leads to the lowest Mean Absolute Error, which is the following combination:
 
-              \item However, when choosing to scale the feature data with a Min-Max Scaler, the box plots look as follows:
-
-
-
-                    This happens because the \textit{kNN} classifier, when choosing to normalize feature data, it adresses the previously mentioned problems and leads to heavily reduced variability, which in turn leads to a more consistent and accurate classification.
-
-                    For \textit{Naive Bayes}, the scaling of the data does not generally affect the performance, since it is a parametric model.
-
-              \item Perfoming a paired t-test on the accuracies of the two classifiers, using \texttt{scipy}'s method \texttt{ttest\_rel} that considers $H_0$ to be the hypothesis that the two classifiers have the same stastical significance regarding accuracy, and $H_1$ to be the hypothesis that \textit{kNN} is more accurate than Naive Bayes, the results are as follows:
-
-                    \begin{itemize}
-                        \item When not scaling feature data: $P\text{-value} = 0.998415501126768$
-                              \begin{itemize}
-                                  \item Considering a $1\%$ threshold, \textit{kNN} is not statistically superior than Bayes
-                                  \item Considering a $5\%$ threshold, \textit{kNN} is not statistically superior than Bayes
-                                  \item Considering a $10\%$ threshold, \textit{kNN} is not statistically superior than Bayes
-                              \end{itemize}
-                        \item When min-max scaling feature data: $P\text{-value} = 0.7532332545792753$
-                              \begin{itemize}
-                                  \item Considering a $1\%$ threshold, \textit{kNN} is not statistically superior than Bayes
-                                  \item Considering a $5\%$ threshold, \textit{kNN} is not statistically superior than Bayes
-                                  \item Considering a $10\%$ threshold, \textit{kNN} is not statistically superior than Bayes
-                              \end{itemize}
-                    \end{itemize}
-
-                    We can therefore easily conclude that the hypothesis "the \textit{kNN} model is statistically superior to
-                    naïve Bayes regarding accuracy" is \textbf{false / rejected}.
-          \end{enumerate}
-    \item To compare the performance of uniform and distance-based weights \textit{kNN} classifiers with varying amounts of neighbors (\textit{k}) used in classifications, a 80-20 train-test split was performed for each combination:
-
-          \begin{enumerate}[label=\textbf{\alph*.)}]
-              \item The following plots showcase the obtained results:
-
-
-
-              \item Generally, the bigger the value of \textit{k} on a \textit{kNN} classifier, the more accurate the predictions are, until a certain point. This point, for either uniform or distance-based weights, is when the accuracies on both training and testing data is the highest, which seems to be around $k = 30$ for this dataset.
-
-
-                    In terms of generalization capabilities, the distance-based weighting system seems to be more overfitted, with the training accuracy being unchanged and the testing accuracy flatlining. The uniform weighting system, however, seems to be more general, with the training and testing accuracy approaching each other as the number of neighbors increases.
-
-                    Before the suggested point, for the uniform weights, the model is overfitting on the training data.
-                    Past $k=30$ it may be at the risk of underfitting, a phenomenon not observable for the dataset at hand.
-
-          \end{enumerate}
-
-    \item Some properties from the dataset that may justify the shortcomings of Naive Bayes classifier on this dataset are:
-          \begin{itemize}
-              \item Since Naive Bayes assumes that all features are independent, it ignores the relantionships and correlation that these features may have in relation to heart disease diagnosis.
-              \item The dataset has features which are not normally distributed or are not numerical, which is a violation of the Gaussian Naive Bayes conditions. Some of these features include the categorical features, such as $cp$, $fbs$, $resteg$, $exang$ and $slope$, for example. This leads to incorrect probability calculation, and therefore, incorrect classification.
-          \end{itemize}
-
+            \begin{itemize}
+                \item L2 penalty: 0.001
+                \item Learning Rate: 0.01
+                \item Batch Size: 32
+            \end{itemize}
+        
+            MISSING: DISCUSSION OF TRADE-OFFS BETWEEN COMBINATIONS
 \end{enumerate}
 \end{document}
